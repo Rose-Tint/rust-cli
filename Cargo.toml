@@ -1,0 +1,16 @@
+[package]
+name = "rust-cli"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "cli"
+path = "src/lib.rs"
+
+[[example]]
+name = "pkg_mgr"
+path = "examples/pkg_mgr.rs"
+
+[dependencies]
+regex = "1.10.4"
+
