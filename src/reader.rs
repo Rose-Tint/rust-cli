@@ -1,29 +1,50 @@
+pub type RdrResult<R> = Result<R, String>;
+
 /// @type-param T - Represents the result. Typically an enum consisting of all the fields and its value.
 ///     Might also be `bool` if its just being used as a validator
-pub struct Reader<R>(Box<dyn FnOnce(&mut R, Option<String>) -> R>);
+pub struct Reader<O, T>(Box<dyn FnOnce(O, T) -> RdrResult<O>>);
 
-impl<R> Reader<R> {
-    pub fn optional<F>(f: F) -> Self
-        where F: FnOnce(&mut R, Option<String>) -> R + 'static
+impl<O, T> Reader<O, T> {
+    pub fn new<F>(f: F) -> Self
+        where F: FnOnce(O, T) -> RdrResult<O> + 'static
     {
         Reader(Box::new(f))
     }
 
-    pub fn require<F>(f: F) -> Self
-        where F: FnOnce(&mut R, String) -> R + 'static
-    {
-        Reader(Box::new(move |t, opt| f(t, opt.unwrap_or_default())))
-    }
-
-    pub (crate) fn call(self, t: &mut R, opt: Option<String>) -> R {
+    pub (crate) fn call(self, t: O, opt: T) -> RdrResult<O> {
         return (self.0)(t, opt);
     }
 }
 
-impl Reader<bool> {
-    pub fn validate<P>(pred: P) -> Self
-        where P: FnOnce(String) -> bool + 'static
+impl<O, T> Reader<O, Option<T>> {
+    pub fn require<F>(f: F) -> Self
+        where F: FnOnce(O, T) -> RdrResult<O> + 'static
     {
-        return Reader(Box::new(move |_, opt| pred(opt.unwrap_or_default())));
+        return Reader(Box::new(|opts, opt|
+            match opt {
+                None => Err("Missing required argument $m".to_string()),
+                Some(x) => f(opts, x),
+            }
+        ));
+    }
+}
+
+impl<O> Reader<O, Option<String>> {
+    pub fn bool_reader<F>(f: F) -> Self
+        where F: FnOnce(O, bool) -> RdrResult<O> + 'static
+    {
+        return Reader(Box::new(|opts, val|
+            if let Some(mut s) = val {
+                s = s.trim().to_lowercase();
+                if s == "true" {
+                    f(opts, true)
+                } else if s == "false" {
+                    f(opts, false)
+                } else {
+                    Err("Invalid Argument".to_string())
+                }
+            } else {
+                f(opts, true)
+            }));
     }
 }

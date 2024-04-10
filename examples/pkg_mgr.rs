@@ -1,42 +1,55 @@
-use std::path::Path;
+use cli::command::*;
+use cli::option::*;
 
 extern crate cli;
-// use cli::setup::*;
 
 fn main() {
 }
 
-enum Command {
-    Help(Option<Command>),
-    Build(BuildType),
+enum Commands {
+    Build(Vec<String>),
     Install(Vec<String>),
-    Update,
-    Run(Option<String>),
+    Uninstall(Vec<String>),
+    Run(Vec<String>),
 }
 
-enum BuildType {
-    Library,
-    Tests,
-    Executable,
+use Commands::*;
+
+enum Verbosity {
+    Verbose,
+    Normal,
+    Silent,
 }
 
-struct CmdLine {
-    verbose: bool,
-    output_folder: Path,
-    jobs: usize,
+struct Options {
+    verbosity: Verbosity,
+    output_folder: String,
+    threaded: bool,
+    profile: bool,
+    jobs: u8,
 }
 
-fn get_cmdline() {
-    use cli::setup::*;
-    let setup = CmdLineSetup {
-        commands: vec![
-        ],
-        args: ArgsConstraint::AtLeast(0),
-        options: vec![
-            flag()
-                .long("verbose")
-                .short('v')
-                .help("Enable verbose output")
-        ]
-    };
+fn setup_config() -> cli::Setup<Commands, Options> {
+    cli::setup()
+        .command(
+            Command::new("build", Build(vec![]))
+                .option(switch(
+                    "profile",
+                    |opts| {
+                        opts.profile = true;
+                        return opts
+                    }))
+        )
+
+    // return Setup {
+    //     commands: vec![
+    //     ],
+    //     args: ArgsConstraint::AtLeast(0),
+    //     options: vec![
+    //         flag()
+    //             .long("verbose")
+    //             .short('v')
+    //             .help("Enable verbose output")
+    //     ]
+    // };
 }
