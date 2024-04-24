@@ -29,5 +29,3 @@ pub enum Context {
 pub trait ErrFormatter {
     fn format(err: CmdLineErr) -> String;
 }
-
-pub struct 

@@ -1,35 +1,32 @@
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum Name {
-    /// Just a regular name, typically only used for commands
-    Unprefixed(String),
+pub enum FlagName {
     /// Only a long-form name. `Long("example")` is activated by `--example`
     Long(String),
     /// Only a one-letter name. `Short('e')` is activated by `-e`
     Short(char),
 }
 
-impl From<char> for Name {
+impl From<char> for FlagName {
     fn from(value: char) -> Self {
-        Name::Short(value)
+        FlagName::Short(value)
     }
 }
 
-impl From<&str> for Name {
+impl From<&str> for FlagName {
     /// Converts to `Long` for internal reasons (this should only be used for
     /// `Option`s).
     fn from(value: &str) -> Self {
-        Name::Long(value.to_string())
+        FlagName::Long(value.to_string())
     }
 }
 
-impl ToString for Name {
+impl ToString for FlagName {
     fn to_string(&self) -> String {
         match self {
-            Self::Unprefixed(name) => name.clone(),
             Self::Long(name) => format!("--{name}"),
             Self::Short(name) => format!("-{name}"),
         }
     }
 }
 
-pub type Names = Vec<Name>;
+pub type Names = Vec<FlagName>;

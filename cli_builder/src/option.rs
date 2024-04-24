@@ -2,19 +2,18 @@
 
 use crate::reader::*;
 use crate::name::*;
-use crate::help::*;
 
 
-pub struct CmdOption<T> {
+pub struct Flag<T> {
     pub (crate) names: Names,
     pub (crate) descr: Option<String>,
     pub (crate) metavar: Option<String>,
     pub (crate) reader: Option<Reader<T>>,
 }
 
-impl<T> CmdOption<T> {
-    pub (crate) fn new(name: impl Into<Name>) -> Self {
-        CmdOption {
+impl<T> Flag<T> {
+    pub (crate) fn new(name: impl Into<FlagName>) -> Self {
+        Flag {
             names: vec![name.into()],
             descr: None,
             metavar: None,
@@ -25,12 +24,12 @@ impl<T> CmdOption<T> {
     // ##### BUILDER FUNCTIONS ######
 
     pub fn long(mut self, name: &str) -> Self {
-        self.names.push(Name::Long(name.to_string()));
+        self.names.push(FlagName::Long(name.to_string()));
         return self;
     }
 
     pub fn short(mut self, name: char) -> Self {
-        self.names.push(Name::Short(name));
+        self.names.push(FlagName::Short(name));
         return self;
     }
 
@@ -52,24 +51,9 @@ impl<T> CmdOption<T> {
     }
 }
 
-impl<O> HasHelp for CmdOption<O> {
-    fn get_help(&self) -> Help {
-        Help {
-            names: self.names.clone(),
-            metavar: self.metavar.clone(),
-            descr: descr_helper(self.descr.clone()),
-        }
-    }
-
-    fn help(mut self, help: &str) -> Self {
-        self.descr = Some(help.to_string());
-        return self;
-    }
-}
-
 #[allow(private_bounds)]
-pub fn flag<T: 'static>(name: impl Into<Name>, value: T) -> CmdOption<T> {
-    CmdOption {
+pub fn flag<T: 'static>(name: impl Into<FlagName>, value: T) -> Flag<T> {
+    Flag {
         names: vec![name.into()],
         descr: None,
         metavar: None,
@@ -78,8 +62,8 @@ pub fn flag<T: 'static>(name: impl Into<Name>, value: T) -> CmdOption<T> {
 }
 
 #[allow(private_bounds)]
-pub fn option<T: 'static>(name: impl Into<Name>) -> CmdOption<T> {
-    CmdOption {
+pub fn option<T: 'static>(name: impl Into<FlagName>) -> Flag<T> {
+    Flag {
         names: vec![name.into()],
         descr: None,
         metavar: None,

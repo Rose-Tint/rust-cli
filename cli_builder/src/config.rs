@@ -4,7 +4,7 @@ use crate::option::*;
 
 pub struct Config<C, O> {
     pub commands: Vec<Command<C>>,
-    pub options: Vec<CmdOption<O>>,
+    pub options: Vec<Flag<O>>,
 }
 
 pub fn setup<C, O>() -> Config<C, O> {
@@ -17,7 +17,7 @@ impl<C, O> Config<C, O> {
         return self;
     }
 
-    pub fn option(mut self, opt: CmdOption<O>) -> Self {
+    pub fn option(mut self, opt: Flag<O>) -> Self {
         self.options.push(opt);
         return self;
     }

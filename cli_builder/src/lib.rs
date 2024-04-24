@@ -3,7 +3,6 @@
 
 pub mod command;
 pub mod config;
-pub mod help;
 pub mod name;
 pub mod option;
 pub mod reader;

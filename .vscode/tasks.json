@@ -1,0 +1,41 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "group": "test",
+            "label": "Expand Cargo Example",
+            "type": "cargo",
+            "command": "expand",
+            "args": [
+                "--theme", "github",
+                "--example", "cargo_derive",
+            ],
+            "env": {
+                "RUSTFLAGS": "-Zmacro-backtrace"
+            }
+        },
+        {
+            "group": "test",
+            "label": "Derive Tests",
+            "type": "cargo",
+            "command": "test",
+            "args": [
+                "--theme", "github",
+                "--test", "derive*",
+            ],
+            "env": {
+                "RUSTFLAGS": "-Zmacro-backtrace"
+            },
+        },
+        {
+            "group": "test",
+            "label": "Test All",
+            "type": "cargo",
+            "command": "test",
+            "args": [ "--workspace", ],
+            "env": {
+                "RUSTFLAGS": "-Zmacro-backtrace"
+            },
+        },
+    ]
+}
