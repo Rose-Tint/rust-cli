@@ -1,0 +1,18 @@
+[package]
+name = "cli_derive"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "cli_derive"
+path = "src/lib.rs"
+
+[dependencies]
+cli_builder = { path = "../cli_builder" }
+cli_lexer = { path = "../cli_lexer" }
+proc-macro2 = "1.0.79"
+quote = "1.0.36"
+syn = { version = "2.0.58", features = ["derive", "parsing", "full", "extra-traits"] }
+
+# [[test]]
+

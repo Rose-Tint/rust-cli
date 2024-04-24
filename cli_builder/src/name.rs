@@ -1,5 +1,5 @@
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub (crate) enum Name {
+pub enum Name {
     /// Just a regular name, typically only used for commands
     Unprefixed(String),
     /// Only a long-form name. `Long("example")` is activated by `--example`
@@ -32,4 +32,4 @@ impl ToString for Name {
     }
 }
 
-pub (crate) type Names = Vec<Name>;
+pub type Names = Vec<Name>;

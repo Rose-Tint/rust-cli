@@ -1,0 +1,11 @@
+[package]
+name = "cli_builder"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "cli_builder"
+path = "src/lib.rs"
+
+[dependencies]
+cli_lexer = { path = "../cli_lexer" }

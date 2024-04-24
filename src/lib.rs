@@ -1,29 +1,17 @@
-pub mod command;
-pub mod help;
-pub mod name;
-pub mod option;
-pub mod reader;
+pub use cli_builder as builder;
+pub use cli_builder::derives;
+pub use cli_derive_macros::*;
+pub use cli_lexer::err;
 
-use crate::command::*;
-use crate::option::*;
-
-pub struct Setup<C, O=C> {
-    pub commands: Vec<Command<C, O>>,
-    pub options: Vec<Option<O>>,
+pub mod derive {
+    pub use cli_derive::*;
 }
 
-pub fn setup<C, O>() -> Setup<C, O> {
-    Setup { commands: vec![], options: vec![] }
-}
-
-impl<C, O> Setup<C, O> {
-    pub fn command(mut self, cmd: Command<C, O>) -> Self {
-        self.commands.push(cmd);
-        return self;
-    }
-
-    pub fn option(mut self, opt: Option<O>) -> Self {
-        self.options.push(opt);
-        return self;
-    }
+/// export is required for derivation.
+/// contains the items used by the derive-macros.
+pub mod internal {
+    pub use cli_builder::derives::*;
+    pub use cli_lexer::internal::*;
+    pub use cli_lexer::err::CmdLineErr::{self, *};
+    pub use cli_lexer::*;
 }

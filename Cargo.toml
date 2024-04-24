@@ -1,16 +1,34 @@
 [package]
-name = "rust-cli"
+name = "cli"
 version = "0.1.0"
 edition = "2021"
+
+[workspace]
+members = [
+    "cli_builder",
+    "cli_derive",
+    "cli_derive_macros",
+    "cli_lexer",
+]
 
 [lib]
 name = "cli"
 path = "src/lib.rs"
 
-[[example]]
-name = "pkg_mgr"
-path = "examples/pkg_mgr.rs"
-
 [dependencies]
-regex = "1.10.4"
+cli_builder = { path = "./cli_builder" }
+cli_derive = { path = "./cli_derive" }
+cli_derive_macros = { path = "./cli_derive_macros" }
+cli_lexer = { path = "./cli_lexer" }
 
+[[example]]
+name = "cargo"
+path = "examples/cargo.rs"
+
+[[example]]
+name = "cargo_derive"
+path = "examples/cargo_derive.rs"
+
+[[test]]
+name = "derives"
+path = "tests/derive.rs"

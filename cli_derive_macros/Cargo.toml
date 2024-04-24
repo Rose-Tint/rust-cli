@@ -1,0 +1,16 @@
+[package]
+name = "cli_derive_macros"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "cli_derive_macros"
+path = "src/lib.rs"
+proc-macro = true
+
+[dependencies]
+cli_builder = { path = "../cli_builder" }
+cli_derive = { path = "../cli_derive" }
+proc-macro2 = "1.0.79"
+quote = "1.0.36"
+syn = { version = "2.0.58", features = ["derive", "parsing", "full"] }
